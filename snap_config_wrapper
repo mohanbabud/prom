@@ -1,0 +1,4 @@
+#!/bin/sh
+
+test -e $SNAP_DATA/prometheus.yml || cp $SNAP/etc/prometheus/prometheus.yml.example $SNAP_DATA/prometheus.yml
+$SNAP/bin/prometheus -config.file=$SNAP_DATA/prometheus.yml -storage.local.path=$SNAP_COMMON
