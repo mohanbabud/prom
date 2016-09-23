@@ -22,10 +22,12 @@ parts:
       documentation/examples/prometheus.yml: etc/prometheus/prometheus.yml.example
     snap:
       - etc/prometheus/prometheus.yml.example
-  first-run-wrapper:
+  snap-wrappers:
     plugin: dump
     source: .
     organize:
       snap_config_wrapper: bin/prometheus.wrapper
+      daemon_arguments: etc/prometheus/daemon_arguments.example
     snap:
       - bin/prometheus.wrapper
+      - etc/prometheus/daemon_arguments.example
