@@ -9,6 +9,10 @@ apps:
     command: 'bin/prometheus.wrapper'
     plugs: [network-bind, network]
     daemon: simple
+  promtool:
+    command: 'bin/promtool'
+  storagetool:
+    command: 'bin/storagetool'
 parts:
   prometheus:
     plugin: go
@@ -20,6 +24,8 @@ parts:
     source-type: git
     organize:
       documentation/examples/prometheus.yml: etc/prometheus/prometheus.yml.example
+    stage:
+      - etc/prometheus/prometheus.yml.example
     snap:
       - etc/prometheus/prometheus.yml.example
   snap-wrappers:
@@ -28,6 +34,9 @@ parts:
     organize:
       snap_config_wrapper: bin/prometheus.wrapper
       daemon_arguments: etc/prometheus/daemon_arguments.example
+    stage:
+      - bin/prometheus.wrapper
+      - etc/prometheus/daemon_arguments.example
     snap:
       - bin/prometheus.wrapper
       - etc/prometheus/daemon_arguments.example
