@@ -7,12 +7,16 @@ confinement: strict
 apps:
   prometheus:
     command: 'bin/prometheus.wrapper'
-    plugs: [network-bind, network]
+    plugs: [network-bind, network, content]
     daemon: simple
   promtool:
     command: 'bin/promtool'
   storagetool:
     command: 'bin/storagetool'
+plugs:
+  content:
+    content: promreg
+    target: $SNAP_DATA/promreg
 parts:
   prometheus:
     plugin: go
