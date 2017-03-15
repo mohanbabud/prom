@@ -1,5 +1,6 @@
 name: prometheus
 version: master
+grade: devel
 summary: The Prometheus monitoring system and time series database
 description: |
   Prometheus is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts if some condition is observed to be true.
@@ -30,7 +31,7 @@ parts:
       documentation/examples/prometheus.yml: etc/prometheus/prometheus.yml.example
     stage:
       - etc/prometheus/prometheus.yml.example
-    snap:
+    prime:
       - etc/prometheus/prometheus.yml.example
   snap-wrappers:
     plugin: dump
@@ -41,6 +42,6 @@ parts:
     stage:
       - bin/prometheus.wrapper
       - etc/prometheus/daemon_arguments.example
-    snap:
+    prime:
       - bin/prometheus.wrapper
       - etc/prometheus/daemon_arguments.example
