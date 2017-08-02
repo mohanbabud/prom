@@ -1,5 +1,5 @@
 name: prometheus
-version: 1.5.2
+version: 1.7.1
 grade: stable
 summary: The Prometheus monitoring system and time series database
 description: |
@@ -13,8 +13,6 @@ apps:
     stop-timeout: 300s
   promtool:
     command: 'bin/promtool'
-  storagetool:
-    command: 'bin/storagetool'
 plugs:
   content:
     content: promreg
@@ -23,12 +21,25 @@ parts:
   prometheus:
     plugin: go
     source: https://github.com/prometheus/prometheus.git
-    source-tag: v1.5.2
+    source-tag: v1.7.1
     go-importpath: github.com/prometheus/prometheus
+    build-packages: [golang-1.8]
+    build: |
+        # Make sure we use go 1.8
+        sudo mv /usr/bin/go /tmp/go.bak
+        sudo ln -s /usr/lib/go-1.8/bin/go /usr/bin/go
+        export "GOPATH=$PWD/../go" "PATH=$PATH:$PWD/../go/bin"
+        cd ../go/src/github.com/prometheus/prometheus/
+        make promu
+        make build
+    install: |
+        mkdir $SNAPCRAFT_PART_INSTALL/bin
+        cp -p $SNAPCRAFT_PART_INSTALL/../src/promtool $SNAPCRAFT_PART_INSTALL/bin/
+        cp -p $SNAPCRAFT_PART_INSTALL/../src/prometheus $SNAPCRAFT_PART_INSTALL/bin/
   example-config:
     plugin: dump
     source: https://github.com/prometheus/prometheus.git
-    source-tag: v1.5.2
+    source-tag: v1.7.1
     source-type: git
     organize:
       documentation/examples/prometheus.yml: etc/prometheus/prometheus.yml.example
