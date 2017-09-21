@@ -10,7 +10,7 @@ apps:
     command: 'bin/prometheus.wrapper'
     plugs: [network-bind, network, content]
     daemon: simple
-    stop-timeout: 300s
+    stop-timeout: 900s
   promtool:
     command: 'bin/promtool'
 plugs:
