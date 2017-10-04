@@ -6,4 +6,4 @@ test -d $SNAP_DATA/promreg || mkdir $SNAP_DATA/promreg
 
 ulimit -n 4096
 . $SNAP_DATA/daemon_arguments
-$SNAP/bin/prometheus $ARGS -config.file=$SNAP_DATA/prometheus.yml -storage.local.path=$SNAP_COMMON
+$SNAP/bin/prometheus $ARGS --config.file=$SNAP_DATA/prometheus.yml --storage.tsdb.path=$SNAP_COMMON

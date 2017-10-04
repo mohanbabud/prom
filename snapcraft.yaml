@@ -1,5 +1,5 @@
 name: prometheus
-version: 1.7.1
+version: 2.0.0-beta.5
 grade: stable
 summary: The Prometheus monitoring system and time series database
 description: |
@@ -21,13 +21,12 @@ parts:
   prometheus:
     plugin: go
     source: https://github.com/prometheus/prometheus.git
-    source-tag: v1.7.1
+    source-tag: v2.0.0-beta.5
     go-importpath: github.com/prometheus/prometheus
     build-packages: [golang-1.8]
     build: |
         # Make sure we use go 1.8
-        sudo mv /usr/bin/go /tmp/go.bak
-        sudo ln -s /usr/lib/go-1.8/bin/go /usr/bin/go
+        export "PATH=/usr/lib/go-1.8/bin/:$PATH"
         export "GOPATH=$PWD/../go" "PATH=$PATH:$PWD/../go/bin"
         cd ../go/src/github.com/prometheus/prometheus/
         make promu
@@ -39,7 +38,7 @@ parts:
   example-config:
     plugin: dump
     source: https://github.com/prometheus/prometheus.git
-    source-tag: v1.7.1
+    source-tag: v2.0.0-beta.5
     source-type: git
     organize:
       documentation/examples/prometheus.yml: etc/prometheus/prometheus.yml.example
