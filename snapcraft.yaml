@@ -1,5 +1,5 @@
 name: prometheus
-version: 2.0.0
+version: 2.1.0
 grade: stable
 summary: The Prometheus monitoring system and time series database
 description: |
@@ -21,7 +21,7 @@ parts:
   prometheus:
     plugin: go
     source: https://github.com/prometheus/prometheus.git
-    source-tag: v2.0.0
+    source-tag: v2.1.0
     go-importpath: github.com/prometheus/prometheus
     build-packages: [golang-1.8]
     build: |
@@ -38,7 +38,7 @@ parts:
   example-config:
     plugin: dump
     source: https://github.com/prometheus/prometheus.git
-    source-tag: v2.0.0
+    source-tag: v2.1.0
     source-type: git
     organize:
       documentation/examples/prometheus.yml: etc/prometheus/prometheus.yml.example
