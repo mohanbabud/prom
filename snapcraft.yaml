@@ -27,8 +27,8 @@ parts:
     source-tag: v2.1.0
     go-importpath: github.com/prometheus/prometheus
     build: |
+        export "GOPATH=$PWD/../go"
         cd ../go/src/github.com/prometheus/prometheus/
-        make promu
         make build
     install: |
         mkdir $SNAPCRAFT_PART_INSTALL/bin
