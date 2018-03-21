@@ -19,7 +19,7 @@ plugs:
     target: $SNAP_DATA/promreg
 parts:
   go:
-    source-tag: go1.9
+    source-tag: go1.10
   prometheus:
     after: [go]
     plugin: go
