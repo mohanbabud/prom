@@ -21,7 +21,7 @@ plugs:
 
 parts:
   go:
-    source-tag: go1.10
+    source-tag: go1.12
   prometheus:
     after: [go]
     plugin: go
