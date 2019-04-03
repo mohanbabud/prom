@@ -39,7 +39,7 @@ parts:
         mkdir -p $SNAPCRAFT_PART_INSTALL/etc/prometheus
         cp -p $SNAPCRAFT_PART_INSTALL/../src/promtool $SNAPCRAFT_PART_INSTALL/bin/
         cp -p $SNAPCRAFT_PART_INSTALL/../src/prometheus $SNAPCRAFT_PART_INSTALL/bin/
-        cp -p $SNAPCRAFT_PART_INSTALL/../src/documentation/examples/prometheus.yml $SNAPCRAFT_PART_INSTALL/etc/prometheus/
+        cp -p $SNAPCRAFT_PART_INSTALL/../src/documentation/examples/prometheus.yml $SNAPCRAFT_PART_INSTALL/etc/prometheus/prometheus.yml.example
   snap-wrappers:
     plugin: dump
     source: .
