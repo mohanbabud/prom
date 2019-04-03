@@ -1,5 +1,5 @@
 name: prometheus
-version: 2.8.0
+adopt-info: prometheus
 grade: stable
 summary: The Prometheus monitoring system and time series database
 description: |
@@ -26,27 +26,20 @@ parts:
     after: [go]
     plugin: go
     source: https://github.com/prometheus/prometheus.git
-    source-tag: v2.8.0
     go-importpath: github.com/prometheus/prometheus
     build: |
         export "GOPATH=$PWD/../go"
         cd ../go/src/github.com/prometheus/prometheus/
+        version="$(git tag -l | grep -v '\-rc' | sort -V | tail -n 1)"
+        snapcraftctl set-version "$version"
+        git checkout tags/$version
         make build
     install: |
         mkdir $SNAPCRAFT_PART_INSTALL/bin
+        mkdir -p $SNAPCRAFT_PART_INSTALL/etc/prometheus
         cp -p $SNAPCRAFT_PART_INSTALL/../src/promtool $SNAPCRAFT_PART_INSTALL/bin/
         cp -p $SNAPCRAFT_PART_INSTALL/../src/prometheus $SNAPCRAFT_PART_INSTALL/bin/
-  example-config:
-    plugin: dump
-    source: https://github.com/prometheus/prometheus.git
-    source-tag: v2.8.0
-    source-type: git
-    organize:
-      documentation/examples/prometheus.yml: etc/prometheus/prometheus.yml.example
-    stage:
-      - etc/prometheus/prometheus.yml.example
-    prime:
-      - etc/prometheus/prometheus.yml.example
+        cp -p $SNAPCRAFT_PART_INSTALL/../src/documentation/examples/prometheus.yml $SNAPCRAFT_PART_INSTALL/etc/prometheus/
   snap-wrappers:
     plugin: dump
     source: .
