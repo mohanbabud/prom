@@ -31,7 +31,8 @@ parts:
         export "GOPATH=$PWD/../go"
         cd ../go/src/github.com/prometheus/prometheus/
         version="$(git tag -l | grep -v '\-rc' | sort -V | tail -n 1)"
-        snapcraftctl set-version "$version"
+        snap_version=$(echo $version | sed -e s/^v//)
+        snapcraftctl set-version "$snap_version"
         git checkout tags/$version
         make build
     install: |
