@@ -13,7 +13,7 @@ apps:
     daemon: simple
     stop-timeout: 900s
   promtool:
-    plugs: [home, content]
+    plugs: [home]
     command: 'bin/promtool'
 plugs:
   content:
