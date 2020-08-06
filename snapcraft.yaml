@@ -23,11 +23,9 @@ plugs:
     target: $SNAP_DATA/promreg
 
 parts:
-  go:
-    source-tag: go1.12
   prometheus:
-    after: [go]
     plugin: go
+    go-channel: 1.14/stable
     source: https://github.com/prometheus/prometheus.git
     source-tag: v${SNAPCRAFT_PROJECT_VERSION}
     go-importpath: github.com/prometheus/prometheus
