@@ -17,6 +17,7 @@ apps:
     command: 'bin/promtool'
 plugs:
   content:
+    interface: content
     content: promreg
     target: $SNAP_DATA/promreg
 
