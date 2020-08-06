@@ -29,9 +29,8 @@ parts:
     source: https://github.com/prometheus/prometheus.git
     source-tag: v${SNAPCRAFT_PROJECT_VERSION}
     go-importpath: github.com/prometheus/prometheus
-    build: |
+    override-build: |
         make build
-    install: |
         mkdir $SNAPCRAFT_PART_INSTALL/bin
         mkdir -p $SNAPCRAFT_PART_INSTALL/etc/prometheus
         cp -p $SNAPCRAFT_PART_INSTALL/../src/promtool $SNAPCRAFT_PART_INSTALL/bin/
