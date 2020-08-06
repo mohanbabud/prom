@@ -1,5 +1,6 @@
 name: prometheus
 version: 2.20.1
+base: core18
 adopt-info: prometheus
 grade: stable
 summary: The Prometheus monitoring system and time series database
