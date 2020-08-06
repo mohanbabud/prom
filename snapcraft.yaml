@@ -34,7 +34,7 @@ parts:
     source: https://github.com/prometheus/prometheus.git
     source-tag: v${SNAPCRAFT_PROJECT_VERSION}
     go-importpath: github.com/prometheus/prometheus
-    build-packages: [npm,make, build-essential]
+    build-packages: [npm,make, build-essential,curl]
     override-build: |
         npm install yarn -g
         make common-test-short
