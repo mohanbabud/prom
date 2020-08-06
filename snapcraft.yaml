@@ -31,11 +31,11 @@ parts:
     go-importpath: github.com/prometheus/prometheus
     override-build: |
         make build
-        mkdir $SNAPCRAFT_PART_INSTALL/bin
+        mkdir -p $SNAPCRAFT_PART_INSTALL/bin
         mkdir -p $SNAPCRAFT_PART_INSTALL/etc/prometheus
-        cp -p $SNAPCRAFT_PART_INSTALL/../src/promtool $SNAPCRAFT_PART_INSTALL/bin/
-        cp -p $SNAPCRAFT_PART_INSTALL/../src/prometheus $SNAPCRAFT_PART_INSTALL/bin/
-        cp -p $SNAPCRAFT_PART_INSTALL/../src/documentation/examples/prometheus.yml $SNAPCRAFT_PART_INSTALL/etc/prometheus/prometheus.yml.example
+        cp -p $SNAPCRAFT_PART_BUILD/promtool $SNAPCRAFT_PART_INSTALL/bin/
+        cp -p $SNAPCRAFT_PART_BUILD/prometheus $SNAPCRAFT_PART_INSTALL/bin/
+        cp -p $SNAPCRAFT_PART_SRC/documentation/examples/prometheus.yml $SNAPCRAFT_PART_INSTALL/etc/prometheus/prometheus.yml.example
   snap-wrappers:
     plugin: dump
     source: .
