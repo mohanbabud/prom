@@ -31,8 +31,8 @@ parts:
   prometheus:
     plugin: go
     go-channel: 1.14/stable
-    source: https://github.com/prometheus/prometheus.git
-    source-tag: v${SNAPCRAFT_PROJECT_VERSION}
+    source: .
+    go-packages: []
     go-importpath: github.com/prometheus/prometheus
     build-packages: [build-essential, curl, make, npm]
     override-build: |
@@ -46,7 +46,7 @@ parts:
         cp -p $SNAPCRAFT_PART_SRC/documentation/examples/prometheus.yml $SNAPCRAFT_PART_INSTALL/etc/prometheus/prometheus.yml.example
   snap-wrappers:
     plugin: dump
-    source: .
+    source: ./snap/local
     organize:
       snap_config_wrapper: bin/prometheus.wrapper
       daemon_arguments: etc/prometheus/daemon_arguments.example
