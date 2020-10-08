@@ -1,0 +1,51 @@
+FROM ubuntu:focal AS builder
+
+WORKDIR /src/prometheus
+
+COPY . .
+
+# Configure upstream yarn apt repository
+RUN oci/configure-yarn-repo.sh
+
+# Update apt cache and install build dependencies
+ARG BUILD_DEPS="golang-1.14 nodejs yarn make build-essential"
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y --no-install-recommends ${BUILD_DEPS} && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PATH="${PATH}:/usr/lib/go-1.14/bin/"
+
+# Run tests, compile the code and generate a tarball with the npm modules license
+RUN make common-test-short && \
+    make build && \
+    make npm_licenses
+
+FROM ubuntu:focal
+
+# Copy needed files from the builder container
+RUN mkdir -p /etc/prometheus /usr/share/prometheus
+COPY --from=builder /src/prometheus/prometheus                             /bin/prometheus
+COPY --from=builder /src/prometheus/promtool                               /bin/promtool
+COPY --from=builder /src/prometheus/documentation/examples/prometheus.yml  /etc/prometheus/prometheus.yml
+COPY --from=builder /src/prometheus/console_libraries/                     /usr/share/prometheus/console_libraries/
+COPY --from=builder /src/prometheus/consoles/                              /usr/share/prometheus/consoles/
+COPY --from=builder /src/prometheus/LICENSE                                /LICENSE
+COPY --from=builder /src/prometheus/NOTICE                                 /NOTICE
+COPY --from=builder /src/prometheus/npm_licenses.tar.bz2                   /npm_licenses.tar.bz2
+
+# Create symlinks and set permissions
+RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles/ /etc/prometheus/
+RUN mkdir -p /prometheus && \
+    chown -R nobody:nogroup /etc/prometheus /prometheus
+
+# Expose port, configure volume and define the entrypoint
+USER       nobody
+EXPOSE     9090
+VOLUME     [ "/prometheus" ]
+WORKDIR    /prometheus
+ENTRYPOINT [ "/bin/prometheus" ]
+CMD        [ "--config.file=/etc/prometheus/prometheus.yml", \
+             "--storage.tsdb.path=/prometheus", \
+             "--web.console.libraries=/usr/share/prometheus/console_libraries", \
+             "--web.console.templates=/usr/share/prometheus/consoles" ]
