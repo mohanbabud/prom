@@ -36,10 +36,10 @@ $ microk8s kubectl create configmap prometheus-config \
 		--from-file=prometheus-alerts=config/alerts.yml
 ```
 
-Apply the `microk8s-deployments.yml`:
+Apply the `prometheus-deployment.yml`:
 
 ```
-$ microk8s kubectl apply -f microk8s-deployments.yml
+$ microk8s kubectl apply -f prometheus-deployment.yml
 ```
 
 Access `http://localhost:30090` and Prometheus will be running.
