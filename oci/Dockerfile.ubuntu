@@ -23,6 +23,8 @@ RUN make common-test-short && \
 
 FROM ubuntu:focal
 
+ENV TZ UTC
+
 # Copy needed files from the builder container
 RUN mkdir -p /etc/prometheus /usr/share/prometheus
 COPY --from=builder /src/prometheus/prometheus                             /bin/prometheus
@@ -35,9 +37,12 @@ COPY --from=builder /src/prometheus/NOTICE                                 /NOTI
 COPY --from=builder /src/prometheus/npm_licenses.tar.bz2                   /npm_licenses.tar.bz2
 
 # Create symlinks and set permissions
-RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles/ /etc/prometheus/
-RUN mkdir -p /prometheus && \
-    chown -R nobody:nogroup /etc/prometheus /prometheus
+RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles/ /etc/prometheus/ \
+	&& mkdir -p /prometheus \
+	&& chown -R nobody:nogroup /etc/prometheus /prometheus \
+	&& apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Expose port, configure volume and define the entrypoint
 USER       nobody
