@@ -6,7 +6,7 @@ Prometheus is a systems and service monitoring system. It collects metrics from 
 
 ## Tags
 
-* `2.20.1`, `2.20`, `2`, `beta` - **/!\ this is a beta release**
+* `2.20.1-focal`, `2.20.1`, `2.20-focal`, `2.20`, `2-focal`, `2`, `focal`, `beta` - **/!\ this is a beta release**
 
 ## Architectures supported
 
@@ -17,25 +17,20 @@ Prometheus is a systems and service monitoring system. It collects metrics from 
 ### Docker CLI
 
 ```sh
-$ docker run --name prometheus -e TZ=UTC -d squeakywheel/prometheus:edge
+$ docker run -d --name prometheus -p 30090:9090 -e TZ=Europe/London squeakywheel/prometheus:edge
 ```
 
-Since containers are ephemeral, you may want to use persistent data rather than initializing a new database for each newly launched container.  To do this, you can use docker volumes:
-
-```sh
-$ docker run --name prometheus -v /path/to/persisted/data:/prometheus -e TZ=UTC -d squeakywheel/prometheus:edge
-```
-
-**Important note**: the directory you will be using to persist the data needs to belong to `nogroup:nobody`. You can run `chown nogroup:nobody <path_to_persist_data>` before launching your container.
+Access your Prometheus Alertmanager instance at [`localhost:30090`](http://localhost:30090/).
 
 #### Parameters
 
 | Parameter | Description |
 |---|---|
 | `-e TZ=UTC` | Timezone. |
-| `-v /path/to/persisted/data:/prometheus` | Pass the directory used to persist the data. |
-| `-v /path/to/prometheus/config/file/prometheus.yml:/etc/prometheus/prometheus.yml` | Pass a custom config file. |
-| `-v /path/to/prometheus/config/file/alerts.yml:/etc/prometheus/alerts.yml` | Pass a custom alerts config file. |
+| `-p 30090:9090` | Expose MySQL server on `localhost:30090`. |
+| `-v /path/to/persisted/data:/prometheus` | Persist data instead of initializing a new database for each newly launched container. **Important note**: the directory you will be using to persist the data needs to belong to `nogroup:nobody`. You can run `chown nogroup:nobody <path_to_persist_data>` before launching your container. |
+| `-v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml` | Pass a custom config file (download this [example file](https://git.launchpad.net/~canonical-server/ubuntu-server-oci/+git/prometheus/plain/oci/examples/config/prometheus.yml)). |
+| `-v /path/to/alerts.yml:/etc/prometheus/alerts.yml` | Pass a custom alerts config file (download this [example file](https://git.launchpad.net/~canonical-server/ubuntu-server-oci/+git/prometheus/plain/oci/examples/config/alerts.yml)). |
 
 
 #### Testing/Debugging
@@ -146,7 +141,7 @@ spec:
 $ microk8s kubectl apply -f prometheus-deployment.yml
 ```
 
-You will now be able to connect to the Prometheus on `http://localhost:30090`.
+You will now be able to connect to the Prometheus on [`http://localhost:30090`](http://localhost:30090).
 
 ## Bugs and Features request
 
