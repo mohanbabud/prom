@@ -17,7 +17,7 @@ Prometheus is a systems and service monitoring system. It collects metrics from 
 ### Docker CLI
 
 ```sh
-$ docker run -d --name prometheus -p 30090:9090 -e TZ=Europe/London squeakywheel/prometheus:edge
+$ docker run -d --name prometheus -p 30090:9090 -e TZ=UTC squeakywheel/prometheus:edge
 ```
 
 Access your Prometheus instance at [`localhost:30090`](http://localhost:30090/).
