@@ -27,7 +27,7 @@ Access your Prometheus instance at [`localhost:30090`](http://localhost:30090/).
 | Parameter | Description |
 |---|---|
 | `-e TZ=UTC` | Timezone. |
-| `-p 30090:9090` | Expose MySQL server on `localhost:30090`. |
+| `-p 30090:9090` | Expose Prometheus server on `localhost:30090`. |
 | `-v /path/to/persisted/data:/prometheus` | Persist data instead of initializing a new database for each newly launched container. **Important note**: the directory you will be using to persist the data needs to belong to `nogroup:nobody`. You can run `chown nogroup:nobody <path_to_persist_data>` before launching your container. |
 | `-v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml` | Pass a custom config file (download this [example file](https://git.launchpad.net/~canonical-server/ubuntu-server-oci/+git/prometheus/plain/oci/examples/config/prometheus.yml)). |
 | `-v /path/to/alerts.yml:/etc/prometheus/alerts.yml` | Pass a custom alerts config file (download this [example file](https://git.launchpad.net/~canonical-server/ubuntu-server-oci/+git/prometheus/plain/oci/examples/config/alerts.yml)). |
