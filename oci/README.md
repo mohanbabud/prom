@@ -20,7 +20,7 @@ Prometheus is a systems and service monitoring system. It collects metrics from 
 $ docker run -d --name prometheus -p 30090:9090 -e TZ=Europe/London squeakywheel/prometheus:edge
 ```
 
-Access your Prometheus Alertmanager instance at [`localhost:30090`](http://localhost:30090/).
+Access your Prometheus instance at [`localhost:30090`](http://localhost:30090/).
 
 #### Parameters
 
