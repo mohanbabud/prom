@@ -17,7 +17,7 @@ Prometheus is a systems and service monitoring system. It collects metrics from 
 ### Docker CLI
 
 ```sh
-$ docker run -d --name prometheus -p 30090:9090 -e TZ=UTC squeakywheel/prometheus:edge
+$ docker run -d --name prometheus -p 30090:9090 -e TZ=UTC ubuntu/prometheus:edge
 ```
 
 Access your Prometheus instance at [`localhost:30090`](http://localhost:30090/).
@@ -92,7 +92,7 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: squeakywheel/prometheus:edge
+        image: ubuntu/prometheus:edge
         volumeMounts:
         - name: prometheus-config-volume
           mountPath: /etc/prometheus/prometheus.yml
@@ -155,7 +155,7 @@ Make sure to include:
 
 * The digest of the image you are using, you can find it using this command replacing `<tag>` with the one you used to run the image:
 ```sh
-$ docker images --no-trunc --quiet squeakywheel/prometheus:<tag>
+$ docker images --no-trunc --quiet ubuntu/prometheus:<tag>
 ```
 * Reproduction steps for the deployment
 * If it is a feature request, please provide as much detail as possible

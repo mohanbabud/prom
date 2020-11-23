@@ -2,7 +2,7 @@ version: '2'
 
 services:
     prometheus:
-        image: squeakywheel/prometheus:edge
+        image: ubuntu/prometheus:edge
         network_mode: "host"
         ports:
             - 9090:9090

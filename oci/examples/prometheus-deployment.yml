@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: squeakywheel/prometheus:edge
+        image: ubuntu/prometheus:edge
         volumeMounts:
         - name: prometheus-config-volume
           mountPath: /etc/prometheus/prometheus.yml
