@@ -1,26 +1,38 @@
 # Prometheus | Ubuntu
 
+Current Prometheus Docker Image from Ubuntu. Receives security updates and rolls to newer Prometheus or Ubuntu LTS. This repository is exempted from per-user rate limits. For [LTS Docker Image](https://ubuntu.com/security/docker-images) versions of this image, see `lts/prometheus`. 
+
+
 ## About Prometheus
 
 Prometheus is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts if some condition is observed to be true. Read more on the [Prometheus website](https://prometheus.io/).
 
-## Tags
 
-* `2.20.1-focal`, `2.20.1`, `2.20-focal`, `2.20`, `2-focal`, `2`, `focal`, `beta` - **/!\ this is a beta release**
+## Tags and Architectures
+![LTS](https://assets.ubuntu.com/v1/0a5ff561-LTS%402x.png?h=17)
+Up to 5 years free security maintenance `from lts/prometheus`.
 
-## Architectures supported
+![ESM](https://assets.ubuntu.com/v1/572f3fbd-ESM%402x.png?h=17)
+Up to 10 years customer security maintenance `from store/canonical/prometheus`.
 
-* `amd64`, `arm64`, `ppc64el`, `s390x`
+_Tags in italics are not available in ubuntu/prometheus but are shown here for completeness._
+
+| Channel Tag | | | Currently | Architectures |
+|---|---|---|---|---|
+| **`2.20-20.04_beta`** &nbsp;&nbsp; | | | Prometheus 2.20.1 on Ubuntu 20.04 LTS | `amd64`, `arm64`, `ppc64el`, `s390x` |
+| _`track_risk`_ |
+
+Channel tag shows the most stable channel for that track ordered `stable`, `candidate`, `beta`, `edge`. More risky channels are always implicitly available. So if `beta` is listed, you can also pull `edge`. If `candidate` is listed, you can pull `beta` and `edge`. When `stable` is listed, all four are available. Images are guaranteed to progress through the sequence `edge`, `beta`, `candidate` before `stable`.
+
 
 ## Usage
 
-### Docker CLI
+Launch this image locally:
 
 ```sh
-$ docker run -d --name prometheus -p 30090:9090 -e TZ=UTC ubuntu/prometheus:edge
+docker run -d --name prometheus-container -e TZ=UTC -p 30090:9090 ubuntu/prometheus:2.20-20.04_beta
 ```
-
-Access your Prometheus instance at [`localhost:30090`](http://localhost:30090/).
+Access your Prometheus server at `localhost:30090`.
 
 #### Parameters
 
@@ -28,134 +40,50 @@ Access your Prometheus instance at [`localhost:30090`](http://localhost:30090/).
 |---|---|
 | `-e TZ=UTC` | Timezone. |
 | `-p 30090:9090` | Expose Prometheus server on `localhost:30090`. |
-| `-v /path/to/persisted/data:/prometheus` | Persist data instead of initializing a new database for each newly launched container. **Important note**: the directory you will be using to persist the data needs to belong to `nogroup:nobody`. You can run `chown nogroup:nobody <path_to_persist_data>` before launching your container. |
-| `-v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml` | Pass a custom config file (download this [example file](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/oci/examples/config/prometheus.yml)). |
-| `-v /path/to/alerts.yml:/etc/prometheus/alerts.yml` | Pass a custom alerts config file (download this [example file](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/oci/examples/config/alerts.yml)). |
+| `-v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml` | Local [configuration file](https://prometheus.io/docs/prometheus/2.20/configuration/configuration/) `prometheus.yml` (try [this example](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/oci/examples/config/prometheus.yml)). |
+| `-v /path/to/alerts.yml:/etc/prometheus/alerts.yml` | Local [alert configuration file](https://prometheus.io/docs/prometheus/2.20/configuration/configuration/) `alerts.yml` (try [this example](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/oci/examples/config/alerts.yml)). |
 
 
 #### Testing/Debugging
 
-In case you need to debug what it is happening with the container you can run `docker logs <name_of_the_container>`. To get access to an interactive shell run:
-
-```
-$ docker exec -it <name_of_the_container> /bin/bash
-```
-
-### Deploy with Kubernetes
-
-You can use your favorite Kubernetes distribution; if you don't have one, consider [installing MicroK8s](https://microk8s.io/).
-
-With microk8s running, enable the `dns` and `storage` add-ons:
-```sh
-$ microk8s enable dns storage
- ```
-
-Create a configmap for the configuration files (check the upstream documentation [here](https://prometheus.io/docs/prometheus/2.20/getting_started/)):
+To debug the container:
 
 ```sh
-$ microk8s kubectl create configmap prometheus-config --from-file=prometheus=config/prometheus.yml --from-file=prometheus-alerts=config/alerts.yml
+docker logs -f prometheus-container
 ```
 
-Use the sample deployment yaml provided [here](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/oci/examples/prometheus-deployment.yml).
-
-<details>
-  <summary>Apply the `prometheus-deployment.yml` (click to expand)</summary>
-
-```yaml
-# prometheus-deployment.yml
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: prometheus-volume-claim
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: microk8s-hostpath
-  resources:
-    requests:
-      storage: 500M
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: prometheus-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: prometheus
-  template:
-    metadata:
-      labels:
-        app: prometheus
-    spec:
-      containers:
-      - name: prometheus
-        image: ubuntu/prometheus:edge
-        volumeMounts:
-        - name: prometheus-config-volume
-          mountPath: /etc/prometheus/prometheus.yml
-          subPath: prometheus.yml
-        - name: prometheus-config-volume
-          mountPath: /etc/prometheus/alerts.yml
-          subPath: alerts.yml
-        - name: prometheus-data
-          mountPath: /prometheus
-        ports:
-        - containerPort: 9090
-          name: prometheus
-          protocol: TCP
-      volumes:
-        - name: prometheus-config-volume
-          configMap:
-            name: prometheus-config
-            items:
-            - key: prometheus
-              path: prometheus.yml
-            - key: prometheus-alerts
-              path: alerts.yml
-        - name: prometheus-data
-          persistentVolumeClaim:
-            claimName: prometheus-volume-claim
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: prometheus-service
-spec:
-  type: NodePort
-  selector:
-    app: prometheus
-  ports:
-  - protocol: TCP
-    port: 9090
-    targetPort: 9090
-    nodePort: 30090
-    name: prometheus
-```
-
-</details>
+To get an interactive shell:
 
 ```sh
-$ microk8s kubectl apply -f prometheus-deployment.yml
+docker exec -it prometheus-container /bin/bash
 ```
 
-You will now be able to connect to the Prometheus on [`http://localhost:30090`](http://localhost:30090).
 
-## Bugs and Features request
+## Deploy with Kubernetes
 
-If you find a bug in our image or want to request a specific feature file a bug here:
+Works with any Kubernetes; if you don't have one, we recommend you [install MicroK8s](https://microk8s.io/) and `microk8s.enable dns storage` then `snap alias microk8s.kubectl kubectl`.
 
-https://bugs.launchpad.net/ubuntu-docker-images/+filebug
+Download
+[prometheus.yml](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/oci/examples/config/prometheus.yml), [alerts.yml](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/oci/examples/config/alerts.yml) and
+[prometheus-deployment.yml](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/oci/examples/prometheus-deployment.yml) and set `containers.prometheus.image` in `prometheus-deployment.yml` to your chosen channel tag (e.g. `ubuntu/prometheus:2.20-20.04_beta`), then:
 
-In the title of the bug add `prometheus: <reason>`.
-
-Make sure to include:
-
-* The digest of the image you are using, you can find it using this command replacing `<tag>` with the one you used to run the image:
 ```sh
-$ docker images --no-trunc --quiet ubuntu/prometheus:<tag>
+kubectl create configmap prometheus-config --from-file=prometheus=prometheus.yml --from-file=prometheus-alerts=alerts.yml
+kubectl apply -f prometheus-deployment.yml
 ```
-* Reproduction steps for the deployment
-* If it is a feature request, please provide as much detail as possible
+
+You will now be able to connect to the Prometheus on `http://localhost:30090`.
+
+## Bugs and feature requests
+
+If you find a bug in our image or want to request a specific feature, please file a bug here:
+
+[https://bugs.launchpad.net/ubuntu-docker-images/+filebug](https://bugs.launchpad.net/ubuntu-docker-images/+filebug)
+
+Please title the bug "`prometheus: <issue summary>`". Make sure to include the digest of the image you are using, from:
+
+```sh
+docker images --no-trunc --quiet ubuntu/prometheus:<tag>
+```
+
+
