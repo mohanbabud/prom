@@ -41,7 +41,7 @@ RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles
 	&& mkdir -p /prometheus \
 	&& chown -R nobody:nogroup /etc/prometheus /prometheus \
 	&& apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata ca-certificates \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Expose port, configure volume and define the entrypoint
