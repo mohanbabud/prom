@@ -1,119 +1,89 @@
-# Prometheus
+# Prometheus | Ubuntu
 
-[![CircleCI](https://circleci.com/gh/prometheus/prometheus/tree/master.svg?style=shield)][circleci]
-[![Docker Repository on Quay](https://quay.io/repository/prometheus/prometheus/status)][quay]
-[![Docker Pulls](https://img.shields.io/docker/pulls/prom/prometheus.svg?maxAge=604800)][hub]
-[![Go Report Card](https://goreportcard.com/badge/github.com/prometheus/prometheus)](https://goreportcard.com/report/github.com/prometheus/prometheus)
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/486/badge)](https://bestpractices.coreinfrastructure.org/projects/486)
-[![fuzzit](https://app.fuzzit.dev/badge?org_id=prometheus&branch=master)](https://fuzzit.dev)
-
-Visit [prometheus.io](https://prometheus.io) for the full documentation,
-examples and guides.
-
-Prometheus, a [Cloud Native Computing Foundation](https://cncf.io/) project, is a systems and service monitoring system. It collects metrics
-from configured targets at given intervals, evaluates rule expressions,
-displays the results, and can trigger alerts if some condition is observed
-to be true.
-
-Prometheus's main distinguishing features as compared to other monitoring systems are:
-
-- a **multi-dimensional** data model (timeseries defined by metric name and set of key/value dimensions)
-- a **flexible query language** to leverage this dimensionality
-- no dependency on distributed storage; **single server nodes are autonomous**
-- timeseries collection happens via a **pull model** over HTTP
-- **pushing timeseries** is supported via an intermediary gateway
-- targets are discovered via **service discovery** or **static configuration**
-- multiple modes of **graphing and dashboarding support**
-- support for hierarchical and horizontal **federation**
-
-## Architecture overview
-
-![](https://cdn.jsdelivr.net/gh/prometheus/prometheus@c34257d069c630685da35bcef084632ffd5d6209/documentation/images/architecture.svg)
-
-## Install
-
-There are various ways of installing Prometheus.
-
-### Precompiled binaries
-
-Precompiled binaries for released versions are available in the
-[*download* section](https://prometheus.io/download/)
-on [prometheus.io](https://prometheus.io). Using the latest production release binary
-is the recommended way of installing Prometheus.
-See the [Installing](https://prometheus.io/docs/introduction/install/)
-chapter in the documentation for all the details.
-
-Debian packages [are available](https://packages.debian.org/sid/net/prometheus).
-
-### Docker images
-
-Docker images are available on [Quay.io](https://quay.io/repository/prometheus/prometheus) or [Docker Hub](https://hub.docker.com/r/prom/prometheus/).
-
-You can launch a Prometheus container for trying it out with
-
-    $ docker run --name prometheus -d -p 127.0.0.1:9090:9090 prom/prometheus
-
-Prometheus will now be reachable at http://localhost:9090/.
-
-### Building from source
-
-To build Prometheus from the source code yourself you need to have a working
-Go environment with [version 1.13 or greater installed](https://golang.org/doc/install).
-You will also need to have [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/)
-installed in order to build the frontend assets.
-
-You can directly use the `go` tool to download and install the `prometheus`
-and `promtool` binaries into your `GOPATH`:
-
-    $ go get github.com/prometheus/prometheus/cmd/...
-    $ prometheus --config.file=your_config.yml
-
-*However*, when using `go get` to build Prometheus, Prometheus will expect to be able to
-read its web assets from local filesystem directories under `web/ui/static` and
-`web/ui/templates`. In order for these assets to be found, you will have to run Prometheus
-from the root of the cloned repository. Note also that these directories do not include the
-new experimental React UI unless it has been built explicitly using `make assets` or `make build`.
-
-An example of the above configuration file can be found [here.](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus.yml)
-
-You can also clone the repository yourself and build using `make build`, which will compile in
-the web assets so that Prometheus can be run from anywhere:
-
-    $ mkdir -p $GOPATH/src/github.com/prometheus
-    $ cd $GOPATH/src/github.com/prometheus
-    $ git clone https://github.com/prometheus/prometheus.git
-    $ cd prometheus
-    $ make build
-    $ ./prometheus --config.file=your_config.yml
-
-The Makefile provides several targets:
-
-  * *build*: build the `prometheus` and `promtool` binaries (includes building and compiling in web assets)
-  * *test*: run the tests
-  * *test-short*: run the short tests
-  * *format*: format the source code
-  * *vet*: check the source code for common errors
-  * *docker*: build a docker container for the current `HEAD`
-
-## React UI Development
-
-For more information on building, running, and developing on the new React-based UI, see the React app's [README.md](https://github.com/prometheus/prometheus/blob/master/web/ui/react-app/README.md).
-
-## More information
-
-  * The source code is periodically indexed: [Prometheus Core](https://godoc.org/github.com/prometheus/prometheus).
-  * You will find a CircleCI configuration in `.circleci/config.yml`.
-  * See the [Community page](https://prometheus.io/community) for how to reach the Prometheus developers and users on various communication channels.
-
-## Contributing
-
-Refer to [CONTRIBUTING.md](https://github.com/prometheus/prometheus/blob/master/CONTRIBUTING.md)
-
-## License
-
-Apache License 2.0, see [LICENSE](https://github.com/prometheus/prometheus/blob/master/LICENSE).
+Current Prometheus Docker Image from Ubuntu. Receives security updates and rolls to newer Prometheus or Ubuntu LTS. This repository is exempted from per-user rate limits. For [LTS Docker Image](https://ubuntu.com/security/docker-images) versions of this image, see `lts/prometheus`. 
 
 
-[hub]: https://hub.docker.com/r/prom/prometheus/
-[circleci]: https://circleci.com/gh/prometheus/prometheus
-[quay]: https://quay.io/repository/prometheus/prometheus
+## About Prometheus
+
+Prometheus is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts if some condition is observed to be true. Read more on the [Prometheus website](https://prometheus.io/).
+
+
+## Tags and Architectures
+![LTS](https://assets.ubuntu.com/v1/0a5ff561-LTS%402x.png?h=17)
+Up to 5 years free security maintenance `from lts/prometheus`.
+
+![ESM](https://assets.ubuntu.com/v1/572f3fbd-ESM%402x.png?h=17)
+Up to 10 years customer security maintenance `from store/canonical/prometheus`.
+
+_Tags in italics are not available in ubuntu/prometheus but are shown here for completeness._
+
+| Channel Tag | | | Currently | Architectures |
+|---|---|---|---|---|
+| **`2.20-20.04_beta`** &nbsp;&nbsp; | | | Prometheus 2.20.1 on Ubuntu 20.04 LTS | `amd64`, `arm64`, `ppc64el`, `s390x` |
+| _`track_risk`_ |
+
+Channel tag shows the most stable channel for that track ordered `stable`, `candidate`, `beta`, `edge`. More risky channels are always implicitly available. So if `beta` is listed, you can also pull `edge`. If `candidate` is listed, you can pull `beta` and `edge`. When `stable` is listed, all four are available. Images are guaranteed to progress through the sequence `edge`, `beta`, `candidate` before `stable`.
+
+
+## Usage
+
+Launch this image locally:
+
+```sh
+docker run -d --name prometheus-container -e TZ=UTC -p 30090:9090 ubuntu/prometheus:2.20-20.04_beta
+```
+Access your Prometheus server at `localhost:30090`.
+
+#### Parameters
+
+| Parameter | Description |
+|---|---|
+| `-e TZ=UTC` | Timezone. |
+| `-p 30090:9090` | Expose Prometheus server on `localhost:30090`. |
+| `-v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml` | Local [configuration file](https://prometheus.io/docs/prometheus/2.20/configuration/configuration/) `prometheus.yml` (try [this example](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/examples/config/prometheus.yml?h=2.20-20.04)). |
+| `-v /path/to/alerts.yml:/etc/prometheus/alerts.yml` | Local [alert configuration file](https://prometheus.io/docs/prometheus/2.20/configuration/configuration/) `alerts.yml` (try [this example](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/examples/config/alerts.yml?h=2.20-20.04)). |
+
+
+#### Testing/Debugging
+
+To debug the container:
+
+```sh
+docker logs -f prometheus-container
+```
+
+To get an interactive shell:
+
+```sh
+docker exec -it prometheus-container /bin/bash
+```
+
+
+## Deploy with Kubernetes
+
+Works with any Kubernetes; if you don't have one, we recommend you [install MicroK8s](https://microk8s.io/) and `microk8s.enable dns storage` then `snap alias microk8s.kubectl kubectl`.
+
+Download
+[prometheus.yml](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/examples/config/prometheus.yml?h=2.20-20.04), [alerts.yml](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/examples/config/alerts.yml?h=2.20-20.04) and
+[prometheus-deployment.yml](https://git.launchpad.net/~canonical-server/ubuntu-docker-images/+git/prometheus/plain/examples/prometheus-deployment.yml?h=2.20-20.04) and set `containers.prometheus.image` in `prometheus-deployment.yml` to your chosen channel tag (e.g. `ubuntu/prometheus:2.20-20.04_beta`), then:
+
+```sh
+kubectl create configmap prometheus-config --from-file=prometheus=prometheus.yml --from-file=prometheus-alerts=alerts.yml
+kubectl apply -f prometheus-deployment.yml
+```
+
+You will now be able to connect to the Prometheus on `http://localhost:30090`.
+
+## Bugs and feature requests
+
+If you find a bug in our image or want to request a specific feature, please file a bug here:
+
+[https://bugs.launchpad.net/ubuntu-docker-images/+filebug](https://bugs.launchpad.net/ubuntu-docker-images/+filebug)
+
+Please title the bug "`prometheus: <issue summary>`". Make sure to include the digest of the image you are using, from:
+
+```sh
+docker images --no-trunc --quiet ubuntu/prometheus:<tag>
+```
+
+

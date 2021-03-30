@@ -1,9 +1,0 @@
-#!/bin/sh
-
-test -e $SNAP_DATA/prometheus.yml || cp $SNAP/etc/prometheus/prometheus.yml.example $SNAP_DATA/prometheus.yml
-test -e $SNAP_DATA/daemon_arguments || cp $SNAP/etc/prometheus/daemon_arguments.example $SNAP_DATA/daemon_arguments
-test -d $SNAP_DATA/promreg || mkdir $SNAP_DATA/promreg
-
-ulimit -n 4096
-. $SNAP_DATA/daemon_arguments
-$SNAP/bin/prometheus $ARGS --config.file=$SNAP_DATA/prometheus.yml --storage.tsdb.path=$SNAP_COMMON
