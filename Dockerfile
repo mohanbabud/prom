@@ -7,7 +7,7 @@ RUN set -eux; \
 		jq curl ca-certificates squashfs-tools; \
 # taken from https://snapcraft.io/docs/build-on-docker
 # Alternatively, we can install snapd, and issue `snap download prometheus`
-	curl -L $(curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/prometheus?channel=21.04/edge' | jq '.download_url' -r) --output prometheus.snap; \
+	curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $(dpkg --print-architecture)" -H "X-Ubuntu-Architecture: $(dpkg --print-architecture)" 'https://api.snapcraft.io/api/v1/snaps/details/prometheus?channel=21.04/edge' | jq '.download_url' -r) --output prometheus.snap; \
 	mkdir -p /snap; \
 	unsquashfs -d /snap/prometheus prometheus.snap
 
