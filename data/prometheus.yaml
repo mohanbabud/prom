@@ -3,8 +3,8 @@ main: false
 repo: prometheus
 description: >
   Prometheus is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts if some condition is observed to be true. Read more on the [Prometheus website](https://prometheus.io/).
-version: 2.25.2
-base: Ubuntu 21.04
+version: 2.28.1
+base: Ubuntu 21.10
 architectures:
   - amd64
   - arm64

@@ -41,6 +41,6 @@ The repository containing the templates is located at:
 https://code.launchpad.net/~canonical-server/ubuntu-docker-images/+git/templates
 
 The specific data for this image's template can be found inside the
-`data/` directory.
+`data/` directory, in the image's own repository.
 
 
