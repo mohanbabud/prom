@@ -21,7 +21,10 @@ RUN set -eux; \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		tzdata ca-certificates; \
 	rm -rf /var/lib/apt/lists/*; \
-	mkdir -p /prometheus
+	mkdir -p /prometheus; \
+	mkdir -p /usr/share/rocks; \
+# create deb manifest
+	(echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > /usr/share/rocks/dpkg.query
 
 COPY --from=snap-installer /snap/prometheus/bin/prometheus /usr/bin/prometheus
 COPY --from=snap-installer /snap/prometheus/bin/promtool /usr/bin/promtool
