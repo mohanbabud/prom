@@ -9,11 +9,10 @@ alerting:
   alertmanagers:
   - static_configs:
     - targets:
-      #- 127.0.0.1:9093
+      # - alertmanager:9093
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  - 'alerts.yml'
   # - "first_rules.yml"
   # - "second_rules.yml"
 
@@ -27,14 +26,15 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-    - targets: ['localhost:9090']
-
-
+    - targets: ['localhost:9090'] 
   - job_name: 'jenkins'
 
+    metrics_path: '/prometheus'
+    # scheme defaults to 'http'.
+
     static_configs:
-    - targets: ['localhost:80'] 
-  
-#  - job_name: 'grafana'
-#    static_configs:
-#    - targets: ['localhost:3000']  
+    - targets: ['192.168.1.6:80'] 
+
+  - job_name: 'alertman'
+    static_configs:
+    - targets: ['192.168.1.6:30093']  
